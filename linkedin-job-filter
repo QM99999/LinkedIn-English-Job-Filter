@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         LinkedIn Germany English Job Filter - Transparency Mode
+// @name         linkedin-job-filter
 // @namespace    http://tampermonkey.net/
 // @version      6.3
 // @description  Sets transparency to 50% for German-speaking roles while keeping English roles highlighted.
