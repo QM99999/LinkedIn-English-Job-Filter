@@ -4,7 +4,7 @@
 Finding English-speaking roles in Germany on LinkedIn can be overwhelming due to the high volume of German-language postings. As a **Data Analyst**, I developed this automation tool to improve search efficiency by visually de-prioritizing non-English roles.
 
 ## 🤖 Collaborative Development
-This project was co-authored by **Qimin Zhang** and **Google Gemini**. It showcases the synergy between domain expertise in the German job market and AI-assisted software development.
+It showcases the synergy between domain expertise in the German job market and AI-assisted software development.
 
 ## 🛠️ Data-Driven Logic
 The script uses a multi-layered detection approach:
