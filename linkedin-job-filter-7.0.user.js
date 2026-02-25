@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      7.0
 // @description  Full control with both Whitelist and Blacklist. Prioritizes Whitelist and dims everything else that looks German.
-// @author       Qimin Zhang (Co-authored with Gemini)
+// @author       Qimin Zhang 
 // @match        https://www.linkedin.com/jobs/*
 // @grant        none
 // ==/UserScript==
