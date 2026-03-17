@@ -22,7 +22,7 @@ To understand the power of this script, consider this common engineering job sea
 * **Bulk Extraction:** You scroll through 10 pages of pagination. On each page, you click **"➕ Extract Current Page"**. The script parses the DOM, sanitizes the text, drops duplicates, and pushes the data to `sessionStorage`.
 * **Data Delivery:** You click **"📥 Export & Clear"**. The `Blob API` instantly generates a `Jobs_Export.csv` file containing 40 perfectly matched roles with their direct URLs, ready to be imported into your Notion or Excel tracking board.
 
-
+---
 ### 🛠️ Technical Architecture & Under the Hood
 
 This script leverages modern **Vanilla JavaScript** and native browser APIs to ensure high performance and zero external dependencies:
@@ -41,7 +41,7 @@ This script leverages modern **Vanilla JavaScript** and native browser APIs to e
     * **`localStorage`:** Serializes and stores the user's custom UI coordinates (X/Y drag positions) and boolean toggle states.
     * **`sessionStorage`:** Acts as a temporary memory buffer for scraped jobs, preventing data loss across accidental page reloads while avoiding permanent disk clutter.
 
-
+---
 ### ✨ Core Features
 
 #### 1. Multi-Layered Algorithmic Filtering
@@ -58,7 +58,7 @@ This script leverages modern **Vanilla JavaScript** and native browser APIs to e
 * **Targeted Selectors:** Maps to LinkedIn's specific obfuscated class names (`.job-card-list__title`, `.artdeco-entity-lockup__subtitle`) to accurately parse Title, Company, Location, and raw `href` URLs stripped of tracking parameters.
 * **O(N) Array Deduplication:** Cross-references extracted URLs against the current `sessionStorage` buffer in real-time, completely preventing duplicate entries when aggressively scanning multiple pages.
 
-
+---
 ## 🚀 Installation & Setup
 
 1.  **Prerequisites:** Install [Tampermonkey](https://www.tampermonkey.net/) (or a similar userscript manager) in your browser.
@@ -67,7 +67,7 @@ This script leverages modern **Vanilla JavaScript** and native browser APIs to e
     * Confirm the installation when the Tampermonkey prompt appears.
 3.  **Execution:** Navigate to [LinkedIn Jobs](https://www.linkedin.com/jobs/). The script executes automatically (`@match https://www.linkedin.com/jobs/*`) upon DOM load.
 
-
+---
 ## 📸 Screenshots
 <img width="309" height="387" alt="image" src="https://github.com/user-attachments/assets/2b374060-dc4b-4479-a134-5e17357ce62c" />
 
