@@ -15,18 +15,6 @@ To understand the power of this script, consider this common engineering job sea
 2. "Senior", "Lead", or "Principal" roles that LinkedIn's algorithm pushes to the top.
 3. Irrelevant IT Consulting or Student Internship gigs.
 
-**The Script's Solution:**
-Instead of manually clicking and reading hundreds of job descriptions, you configure the script's `CONFIG` object like this:
-
-```javascript
-const CONFIG = {
-    enableFilter: true,
-    hideCompletely: true, // Completely removes nodes from the visual flow
-    germanKeywords: ['entwickler', 'ingenieur', 'berater'], 
-    whitelistKeywords: ['english', 'relocation', 'visa'], 
-    customBlacklist: ['senior', 'lead', 'principal', 'intern', 'student', 'consultant'],
-};
-
 # The Execution & Result:
 
 * **Automated Purge:** As you scroll, the `MutationObserver` instantly detects job cards containing `(m/w/d)` or `Senior` in the title node and injects `display: none;`. The UI remains clean, showing only English-speaking, appropriate-level roles.
