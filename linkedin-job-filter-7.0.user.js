@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         领英终极求职助手 (极简工作流版 v5.1)
+// @name         LinkedIn Ultimate Job Hunter Assistant (Minimalist v5.1)
 // @namespace    http://tampermonkey.net/
 // @version      5.1
-// @description  自动过滤无关/德语职位，精美滑动开关控制，修复了标题重复抓取的Bug，导出CSV后自动清空记录。
+// @description  Auto-filter irrelevant/German jobs, sliding switch controls, fixed title duplication bug, auto-clears data after CSV export.
 // @author       Qimin Zhang
 // @match        https://www.linkedin.com/jobs/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=linkedin.com
@@ -14,7 +14,7 @@
 
     /**
      * ==========================================
-     * 模块一：配置与状态管理 (记忆用户设置和位置)
+     * Module 1: Configuration & State Management (Remembers user settings and position)
      * ==========================================
      */
     let savedSettings = JSON.parse(localStorage.getItem('linkedin_helper_settings') || '{}');
@@ -24,7 +24,7 @@
         hideCompletely: savedSettings.hideCompletely !== undefined ? savedSettings.hideCompletely : true,
 
         germanKeywords: [],
-        whitelistKeywords: [],   // 例如: 'software', 'english'
+        whitelistKeywords: [],   // e.g., 'software', 'english'
         customBlacklist: ['senior','student', 'intern', 'bangkok','Consultant'],
         opacityValue: '0.3',
         scanInterval: 800
@@ -41,7 +41,7 @@
 
     /**
      * ==========================================
-     * 模块二：核心过滤逻辑
+     * Module 2: Core Filtering Logic
      * ==========================================
      */
     const runFilter = () => {
@@ -101,7 +101,7 @@
 
     /**
      * ==========================================
-     * 模块三：UI 面板与安全收集逻辑
+     * Module 3: UI Panel & Data Collection Logic
      * ==========================================
      */
     const initUI = () => {
@@ -126,7 +126,7 @@
         }
 
         const dragHandle = document.createElement('div');
-        dragHandle.innerHTML = '☷ 拖动控制面板';
+        dragHandle.innerHTML = '☷ Drag Control Panel';
         dragHandle.style.cursor = 'grab';
         dragHandle.style.backgroundColor = '#f8f9fa';
         dragHandle.style.padding = '10px';
@@ -180,7 +180,7 @@
         panel.appendChild(contentContainer);
 
         const statusText = document.createElement('div');
-        statusText.innerHTML = `已收集: <strong style="color:#0a66c2; font-size:18px;">${jobs.length}</strong> 条`;
+        statusText.innerHTML = `Collected: <strong style="color:#0a66c2; font-size:18px;">${jobs.length}</strong>`;
         statusText.style.fontSize = '14px';
         statusText.style.color = '#333';
         statusText.style.textAlign = 'center';
@@ -204,9 +204,9 @@
             return btn;
         }
 
-        const btnCollect = createBtn('➕ 提取当前页', '#0a66c2');
-        const btnExport = createBtn('📥 导出并清空', '#057642');
-        const btnClear = createBtn('🗑️ 清空数据', '#dc3545');
+        const btnCollect = createBtn('➕ Extract Current Page', '#0a66c2');
+        const btnExport = createBtn('📥 Export & Clear', '#057642');
+        const btnClear = createBtn('🗑️ Clear Data', '#dc3545');
 
         contentContainer.appendChild(btnCollect);
         contentContainer.appendChild(btnExport);
@@ -219,7 +219,7 @@
         contentContainer.appendChild(divider);
 
         const settingsTitle = document.createElement('div');
-        settingsTitle.innerHTML = '⚙️ 过滤设置 (实时生效)';
+        settingsTitle.innerHTML = '⚙️ Filter Settings (Live)';
         settingsTitle.style.fontSize = '13px';
         settingsTitle.style.color = '#666';
         settingsTitle.style.fontWeight = 'bold';
@@ -280,12 +280,12 @@
             return wrapper;
         }
 
-        contentContainer.appendChild(createToggleSwitch('🟢 开启关键词/德语过滤', 'enableFilter'));
-        contentContainer.appendChild(createToggleSwitch('👻 彻底隐藏 (不勾选则变灰)', 'hideCompletely'));
+        contentContainer.appendChild(createToggleSwitch('🟢 Enable Keyword/German Filter', 'enableFilter'));
+        contentContainer.appendChild(createToggleSwitch('👻 Hide Completely (Uncheck to dim)', 'hideCompletely'));
 
         document.body.appendChild(panel);
 
-        // --- 核心修复区：只取第一行纯净文本 ---
+        // --- Core Fix Area: Extract only the first line of clean text ---
         btnCollect.addEventListener('click', () => {
             const jobCards = document.querySelectorAll('.job-card-container, .scaffold-layout__list-item');
             let newCount = 0;
@@ -298,13 +298,13 @@
                 const locationElement = card.querySelector('.artdeco-entity-lockup__caption, .job-card-container__metadata-item');
                 const linkElement = card.querySelector('a.job-card-list__title, a.job-card-container__link');
 
-                // 使用 split('\n')[0] 截断后续隐藏或徽章文本，只保留干净的第一行
-                const title = titleElement ? titleElement.innerText.split('\n')[0].trim().replace(/"/g, '""') : '未知职位';
-                const company = companyElement ? companyElement.innerText.split('\n')[0].trim().replace(/"/g, '""') : '未知公司';
-                const location = locationElement ? locationElement.innerText.split('\n')[0].trim().replace(/"/g, '""') : '未知地点';
-                const link = linkElement ? linkElement.href.split('?')[0] : '无链接';
+                // Truncate trailing hidden text/badges using split('\n')[0]
+                const title = titleElement ? titleElement.innerText.split('\n')[0].trim().replace(/"/g, '""') : 'Unknown Title';
+                const company = companyElement ? companyElement.innerText.split('\n')[0].trim().replace(/"/g, '""') : 'Unknown Company';
+                const location = locationElement ? locationElement.innerText.split('\n')[0].trim().replace(/"/g, '""') : 'Unknown Location';
+                const link = linkElement ? linkElement.href.split('?')[0] : 'No Link';
 
-                if (title !== '未知职位') {
+                if (title !== 'Unknown Title') {
                     if (!jobs.find(j => j.Link === link)) {
                         jobs.push({ Title: title, Company: company, Location: location, Link: link });
                         newCount++;
@@ -313,10 +313,10 @@
             });
 
             sessionStorage.setItem('linkedin_collected_jobs', JSON.stringify(jobs));
-            statusText.innerHTML = `已收集: <strong style="color:#0a66c2; font-size:18px;">${jobs.length}</strong> 条`;
+            statusText.innerHTML = `Collected: <strong style="color:#0a66c2; font-size:18px;">${jobs.length}</strong>`;
 
             const originalText = btnCollect.innerHTML;
-            btnCollect.innerHTML = `✅ 新增 ${newCount} 条`;
+            btnCollect.innerHTML = `✅ Added ${newCount}`;
             btnCollect.style.backgroundColor = '#057642';
             setTimeout(() => {
                 btnCollect.innerHTML = originalText;
@@ -325,38 +325,38 @@
         });
 
         btnExport.addEventListener('click', () => {
-            if (jobs.length === 0) { alert('当前没有收集到任何数据！'); return; }
+            if (jobs.length === 0) { alert('No data collected currently!'); return; }
             let csvContent = "\uFEFFTitle,Company,Location,Link\n";
             jobs.forEach(row => { csvContent += `"${row.Title}","${row.Company}","${row.Location}","${row.Link}"\n`; });
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.download = `LinkedIn_精选岗位_${jobs.length}条_${new Date().getTime()}.csv`;
+            link.download = `LinkedIn_SelectedJobs_${jobs.length}_${new Date().getTime()}.csv`;
             link.click();
 
             jobs = [];
             sessionStorage.removeItem('linkedin_collected_jobs');
-            statusText.innerHTML = `已收集: <strong style="color:#0a66c2; font-size:18px;">0</strong> 条`;
+            statusText.innerHTML = `Collected: <strong style="color:#0a66c2; font-size:18px;">0</strong>`;
 
             const originalText = btnExport.innerHTML;
-            btnExport.innerHTML = `✅ 导出成功并已清空`;
+            btnExport.innerHTML = `✅ Exported & Cleared successfully`;
             setTimeout(() => {
                 btnExport.innerHTML = originalText;
             }, 2000);
         });
 
         btnClear.addEventListener('click', () => {
-            if(confirm(`确定要清空 ${jobs.length} 条数据吗？`)) {
+            if(confirm(`Are you sure you want to clear ${jobs.length} items?`)) {
                 jobs = [];
                 sessionStorage.removeItem('linkedin_collected_jobs');
-                statusText.innerHTML = `已收集: <strong style="color:#0a66c2; font-size:18px;">0</strong> 条`;
+                statusText.innerHTML = `Collected: <strong style="color:#0a66c2; font-size:18px;">0</strong>`;
             }
         });
     };
 
     /**
      * ==========================================
-     * 模块四：初始化
+     * Module 4: Initialization
      * ==========================================
      */
     const initAll = () => {
