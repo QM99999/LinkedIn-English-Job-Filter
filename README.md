@@ -1,76 +1,75 @@
-# 💼 LinkedIn Ultimate Job Hunter Assistant (Minimalist Workflow Edition)
+# 🚀 领英求职助手 | LinkedIn Job Filter
 
-An advanced, zero-dependency Tampermonkey userscript engineered to optimize the LinkedIn job search experience. Built specifically to handle LinkedIn's dynamic Single Page Application (SPA) architecture, this tool programmatically injects a customized filtering algorithm and a clean data extraction pipeline directly into your browser.
-
-If you are dealing with high-volume job feeds cluttered with irrelevant roles (e.g., local language requirements, wrong seniority levels), this script provides an automated, client-side solution to sanitize your feed and export structured data.
+**多语言双引擎纯净版 | AI 搜索完美适配 | 极简防呆设计** **Trilingual Dual-Engine | AI Search Compatible | Minimalist & Idiot-proof Design**
 
 ---
 
-## 🎯 Real-World Scenario: The "English-Only Junior Developer" Workflow
+## 💡 快速排错 | Quick Troubleshooting
 
-To understand the power of this script, consider this common engineering job search scenario:
-
-**The Problem:** You are a Junior or Mid-level Software Engineer looking for English-speaking roles in Germany (e.g., Berlin or Munich). You search for "Frontend Developer" on LinkedIn. The native filters are inadequate—your feed is instantly polluted with:
-1. Roles requiring fluent German (hidden deep in the text or indicated by localized tags like `(m/w/d)`).
-2. "Senior", "Lead", or "Principal" roles that LinkedIn's algorithm pushes to the top.
-3. Irrelevant IT Consulting or Student Internship gigs.
-
-# The Execution & Result:
-
-* **Automated Purge:** As you scroll, the `MutationObserver` instantly detects job cards containing `(m/w/d)` or `Senior` in the title node and injects `display: none;`. The UI remains clean, showing only English-speaking, appropriate-level roles.
-* **Smart Exemption:** A job titled *"Frontend Developer (m/w/d) - English speaking"* appears. The script's regex catches the `m/w/d`, but the whitelist logic catches `english` and forces the job to render.
-* **Bulk Extraction:** You scroll through 10 pages of pagination. On each page, you click **"➕ Extract Current Page"**. The script parses the DOM, sanitizes the text, drops duplicates, and pushes the data to `sessionStorage`.
-* **Data Delivery:** You click **"📥 Export & Clear"**. The `Blob API` instantly generates a `Jobs_Export.csv` file containing 40 perfectly matched roles with their direct URLs, ready to be imported into your Notion or Excel tracking board.
+> **中文：** 如果脚本已开启但页面没有出现面板，或者修改设置后没有反应，**请尝试强制刷新页面 (F5) 几次**。由于领英是单页应用 (SPA)，有时底层 DOM 加载顺序会导致脚本加载滞后。  
+> **English:** If the script is enabled but the panel doesn't appear, or settings won't apply, **please try refreshing the page (F5) a few times**. Since LinkedIn is a Single Page Application (SPA), the script might occasionally fall behind the DOM loading sequence.
 
 ---
-### 🛠️ Technical Architecture & Under the Hood
 
-This script leverages modern **Vanilla JavaScript** and native browser APIs to ensure high performance and zero external dependencies:
+## ✨ 核心功能 | Key Features
 
-* **Dynamic DOM Monitoring (`MutationObserver`):** LinkedIn is heavily built on React and loads job cards dynamically as you scroll. The script uses a `MutationObserver` paired with a throttling `setInterval` to accurately detect and process new DOM nodes as they enter the viewport, without freezing the browser.
-
-* **Complex Regex Pattern Matching:**
-    * **Localization Tags:** Uses custom RegEx (`/[\(\[][^\)\]]*(m[\/\-]w|w[\/\-]m)[^\)\]]*[\)\]]/i`) to instantly identify German/European gender tags (like `(m/w/d)` or `[w/m/div]`).
-    * **Character Sets:** Scans raw text nodes for localized characters (`/[äöüß]/i`) to aggressively filter out non-target languages.
-
-* **String Sanitization Pipeline:** LinkedIn job cards often contain hidden `<span>` tags, visually hidden badges ("Actively recruiting", "Promoted"), and line breaks. The script bypasses this DOM clutter by specifically targeting core text elements and applying truncation pipelines (`split('\n')[0].trim()`) to guarantee pristine data extraction.
-
-* **Client-Side CSV Generation (`Blob API`):** Data export is handled entirely in-browser using the `Blob API` (`type: 'text/csv;charset=utf-8;'`) and `URL.createObjectURL()`. It automatically formats JSON objects into valid CSV strings, preventing comma-delimitation breaks by wrapping data in quotes.
-
-* **Persistent State Management:**
-    * **`localStorage`:** Serializes and stores the user's custom UI coordinates (X/Y drag positions) and boolean toggle states.
-    * **`sessionStorage`:** Acts as a temporary memory buffer for scraped jobs, preventing data loss across accidental page reloads while avoiding permanent disk clutter.
-
----
-### ✨ Core Features
-
-#### 1. Multi-Layered Algorithmic Filtering
-* **Blacklist vs. Whitelist Priorities:** The algorithm runs an execution chain. A "Whitelist" keyword match (e.g., "English", "Software") immediately halts further checks and forces the job to render, bypassing even strict localized Regex checks.
-* **Custom Exemption Logic:** Automatically ignores local language triggers if explicitly exempted terms (e.g., "f/m/x", "English") are present in the exact same string context.
-* **CSS Override Engine:** Rather than destroying DOM nodes (which breaks LinkedIn's native React state), the script safely injects inline CSS (`display: none` or `filter: grayscale(100%); opacity: 0.3`) to hide or visually deprioritize irrelevant cards.
-
-#### 2. Stateful & Draggable Injected UI
-* **Custom Floating DOM Element:** Injects an isolated control panel directly into the `<body>`.
-* **Physics/Drag Logic:** Implements native `mousedown`, `mousemove`, and `mouseup` event listeners calculating absolute positional offsets (`e.clientX - rect.left`) for smooth, real-time UI dragging.
-* **Real-time DOM Updates:** Toggling settings on the panel instantly re-evaluates the active DOM array and applies new CSS rules without requiring a page refresh.
-
-#### 3. Smart Extraction & Deduplication
-* **Targeted Selectors:** Maps to LinkedIn's specific obfuscated class names (`.job-card-list__title`, `.artdeco-entity-lockup__subtitle`) to accurately parse Title, Company, Location, and raw `href` URLs stripped of tracking parameters.
-* **O(N) Array Deduplication:** Cross-references extracted URLs against the current `sessionStorage` buffer in real-time, completely preventing duplicate entries when aggressively scanning multiple pages.
+* **🤖 完美适配新版 AI 界面 | Full AI Search Compatibility**
+    * **CN:** 独创“语义按钮抓取”架构，彻底解决了领英新版 AI 搜索界面中取消超链接、`display: contents` 幽灵盒子等导致的过滤失效难题。
+    * **EN:** Utilizes "Semantic Button Tracking" architecture to overcome challenges in LinkedIn's new AI Search UI, such as hidden hyperlinks and `display: contents` ghost boxes.
+* **🏷️ 防呆标签系统 | Idiot-proof Tag System**
+    * **CN:** 告别代码修改。直接在面板输入关键词（如 `Senior`），按回车或逗号自动生成标签。即时生效，设置自动本地保存。
+    * **EN:** No coding required. Type keywords (e.g., `Intern`) and hit Enter/Comma to generate tags. Changes apply instantly and save locally.
+* **🌍 双引擎语言过滤 | Dual-Engine Language Filter**
+    * **CN:** 独立开关识别德语（`m/w/d`、`äöüß`）或英语（`f/m/x`、`English`）特征，适合在欧洲/国际化环境求职的用户。
+    * **EN:** Independent toggles to filter German or English jobs by detecting language traits like `m/w/d` or `English`.
+* **👻 彻底隐藏 vs 视觉变灰 | Hide vs. Grayscale**
+    * **CN:** 可选将垃圾岗位彻底删除（节省空间）或变为半透明灰色（降低 50% 透明度并附加黑白滤镜，方便偶尔检漏）。
+    * **EN:** Choose between removing jobs completely or making them 50% transparent grayscale for a less intrusive view.
+* **🌐 三语界面切换 | Trilingual UI**
+    * **CN:** 原生支持中文、英语、德语界面，并支持全屏自由拖拽控制面板。
+    * **EN:** Supports Chinese, English, and German UI; includes a draggable control panel.
 
 ---
-## 🚀 Installation & Setup
 
-1.  **Prerequisites:** Install [Tampermonkey](https://www.tampermonkey.net/) (or a similar userscript manager) in your browser.
-2.  **Install Script:** * Click on `linkedin-job-hunter.user.js` in this repository.
-    * Click the **Raw** button.
-    * Confirm the installation when the Tampermonkey prompt appears.
-3.  **Execution:** Navigate to [LinkedIn Jobs](https://www.linkedin.com/jobs/). The script executes automatically (`@match https://www.linkedin.com/jobs/*`) upon DOM load.
+## 🛠️ 安装指南 | Installation Guide
+
+1.  **环境准备 | Environment:** * **CN:** 确保浏览器已安装 **[Tampermonkey (油猴)](https://www.tampermonkey.net/)** 扩展。  
+    * **EN:** Ensure you have the **[Tampermonkey](https://www.tampermonkey.net/)** extension installed in your browser.
+2.  **添加脚本 | Add Script:** * **CN:** 点击油猴图标 -> “添加新脚本”，将本项目中的代码全部粘贴进去并保存 (`Ctrl+S`)。  
+    * **EN:** Click Tampermonkey icon -> "Create a new script", paste the code and save (`Ctrl+S`).
+3.  **运行脚本 | Run:** * **CN:** 打开或刷新 [LinkedIn Jobs](https://www.linkedin.com/jobs/) 页面，面板会自动出现在右下角。  
+    * **EN:** Open or refresh [LinkedIn Jobs](https://www.linkedin.com/jobs/), the panel will appear at the bottom-right automatically.
 
 ---
-## 📸 Screenshots
-<img width="309" height="387" alt="image" src="https://github.com/user-attachments/assets/2b374060-dc4b-4479-a134-5e17357ce62c" />
 
-<img width="822" height="249" alt="image" src="https://github.com/user-attachments/assets/ed371369-7aae-46c6-9745-81290c5592fc" />
+## 📖 使用说明 | How to Use
 
+### 1. 设置黑名单 | Setting Blacklist
+* **CN:** 点击 **“⚙️ 编辑自定义黑名单”** 展开。输入关键词后按下回车键即可生成标签。
+* **EN:** Click **"⚙️ Edit Custom Blacklist"** to expand. Type a keyword and hit Enter to generate a tag.
 
+### 2. 模式切换 | Toggle Modes
+* **🚫 Filter German/English:** * **CN:** 针对对应语言特征进行智能拦截。
+    * **EN:** Smart interception based on specific language traits.
+* **👻 Hide Completely:** * **CN:** 开启则完全隐藏；关闭则变为 50% 灰度半透明。
+    * **EN:** ON to hide completely; OFF to show as 50% transparent grayscale.
+
+---
+
+## ⚠️ 注意事项 | Important Notes
+
+1.  **JD Filter:**
+    * **CN:** 为保护账号安全，本脚本仅过滤标题，不执行后台 JD 全文爬取（防止被领英风控封号）。
+    * **EN:** Filters titles only. Does not fetch full JDs to avoid triggering LinkedIn's anti-scraping protections.
+2.  **UI Adaption:**
+    * **CN:** 领英经常改版。如遇失效，请尝试刷新页面或提交 Issue。
+    * **EN:** LinkedIn updates its UI frequently. Try refreshing or submit an Issue if it breaks.
+3.  **Privacy:**
+    * **CN:** 100% 本地运行，数据仅存储在本地浏览器，不上传任何个人信息。
+    * **EN:** 100% local execution. Data is stored locally; no personal info is ever uploaded.
+
+---
+
+## 👨‍💻 作者 | Authors
+* **Qimin Zhang**
+* *Special thanks to the open-source community for inspiration on anti-obfuscation.*
