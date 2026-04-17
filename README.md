@@ -70,6 +70,13 @@
 
 ---
 
+## 🌟 支持项目 | Support
+
+* **CN:** 如果这个脚本帮到了你，请给我的 GitHub 项目点个 **Star** 呀！你的支持是我持续更新、对抗领英改版的最大动力。
+* **EN:** If this script helps you, please consider giving the project a **Star**! Your support keeps me motivated to maintain the script and fight against LinkedIn's constant UI changes.
+
+---
+
 ## 👨‍💻 作者 | Authors
 * **Qimin Zhang**
 * *Special thanks to the open-source community for inspiration on anti-obfuscation.*
